@@ -92,7 +92,7 @@ Intermittency grows steadily from ε ≈ 0.08, well below the MSF threshold of 0
 The run-averaged z standard deviation looked flat across 0.10 to 0.16 (2.33, 2.24, 2.41, 2.31) because averaging mixes strongly and weakly intermittent runs. Per run, the signal is strong. The tall-spike count is no better than the plain standard deviation, so the claim is that the mean field carries the state, not that one statistic is special.
 
 
-## Claude Suggestion - several runs per coupling
+## Claude OPUS Suggestion - several runs per coupling
 
 If the failure comes from the loose link between ε and the state, a reservoir trained on one run per ε learns mostly which random run it happened to see. Training on several runs per ε should average that out. Same training window (0.10 to 0.16), fixed bias rule, fresh test simulations, 20 reservoirs:
 
