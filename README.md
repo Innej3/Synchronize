@@ -1,4 +1,4 @@
-# Anticipating synchronization from aggregate data
+# Anticipating synchronization 
 
 Can a machine trained only on data from *before* a synchronization transition predict where it happens, when it sees only the network's average signal? This project reproduces a published reservoir-computing result, tests it on a 50-node chaotic network observed through its mean field, and follows the failures to a physical explanation.
 
