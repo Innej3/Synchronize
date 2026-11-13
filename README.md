@@ -6,7 +6,7 @@ Can a machine trained only on data from *before* a synchronization transition pr
 
 ---
 
-## 1. Background
+## Background
 
 Fan, Kong, Lai and Wang (2021), *Anticipating synchronization with machine learning*, Phys. Rev. Research 3, 023237 ([arXiv:2103.13358](https://arxiv.org/abs/2103.13358)), feed a reservoir computer the control parameter ε as an extra input, train it on a few desynchronized states, and sweep ε in closed loop to predict the onset of synchronization. Their systems are small (two coupled maps or oscillators, a 4-node star), the reservoir sees every node's full state, and each figure shows a single reservoir. Their discussion names large systems as an open problem.
 
@@ -41,7 +41,7 @@ Two questions follow:
 
 These rates come from 50 reservoirs per setting and should be confirmed with more.
 
-## 3. The network: 50 Rössler oscillators
+## The network: 50 Rössler oscillators
 
 **System.** Identical Rössler oscillators (a = b = 0.2, c = 5.7), coupled diffusively through x on a Watts–Strogatz graph (M = 50, k = 6, p = 0.15). RK4 integration, dt = 0.02, transient of 200 to 300 time units discarded.
 
@@ -60,7 +60,7 @@ dz_i/dt =  b + z_i (x_i - c)
 - At ε ≥ 0.44 trajectories leave the Rössler basin and diverge.
 - With a 1% frequency mismatch the error levels off at 0.10 to 0.15 instead of 0.
 
-## 4. Predicting from the mean field
+## Predicting from the mean field
 
 **Observation.** The reservoir sees only the mean field of the 50 oscillators (3 numbers instead of 150). Complete synchronization is detected through the standard deviation of the mean-field z: under complete synchrony the oscillators spike together and the average reproduces a full spike.
 
@@ -72,7 +72,7 @@ dz_i/dt =  b + z_i (x_i - c)
 2. *Bigger reservoirs made it worse.* No size from 600 to 3000 neurons captured the rise at ε = 0.18 (medians 2.34 to 2.43 against 2.68). The fraction of sensible predictions at ε = 0.30 fell from 0.55 to 0.20 as size grew.
 3. *A hand-tuned setting looked good but did not survive a fair test.* A bias of −0.25, picked by inspecting the test curve, appeared to work. With fresh simulations, a fixed bias rule and three training windows (0.06–0.10, 0.08–0.12, 0.10–0.14), no window anticipated the sustained level after the transition.
 
-## 5. Why: on-off intermittency below the threshold
+## Why: on-off intermittency below the threshold
 
 Plotting the synchronization error over time at ε = 0.16 shows the network switching between long nearly-synchronized stretches and bursts of desynchrony. The fraction of time with error below 1.0 (20 runs per ε):
 
@@ -91,7 +91,8 @@ Intermittency grows steadily from ε ≈ 0.08, well below the MSF threshold of 0
 
 The run-averaged z standard deviation looked flat across 0.10 to 0.16 (2.33, 2.24, 2.41, 2.31) because averaging mixes strongly and weakly intermittent runs. Per run, the signal is strong. The tall-spike count is no better than the plain standard deviation, so the claim is that the mean field carries the state, not that one statistic is special.
 
-## 6. The fix: several runs per coupling
+
+## Claude Suggestion - several runs per coupling
 
 If the failure comes from the loose link between ε and the state, a reservoir trained on one run per ε learns mostly which random run it happened to see. Training on several runs per ε should average that out. Same training window (0.10 to 0.16), fixed bias rule, fresh test simulations, 20 reservoirs:
 
@@ -104,7 +105,7 @@ If the failure comes from the loose link between ε and the state, a reservoir t
 
 With one run per ε the reservoir is wrong even at ε = 0.14, a value it trained on, then overshoots and collapses, and its halves disagree. Three runs per ε give a smooth rise whose halves agree through ε = 0.18 (2.75 and 2.68). Five runs add nothing over three. All versions underpredict by about 0.2 in range and fail by ε = 0.22.
 
-## 7. Conclusions
+## Conclusions
 
 1. Fan et al.'s logistic-map result reproduces, but 10 to 17% of random reservoirs blow up past the transition because the synchronized map has no margin at its edges. A single reservoir is not evidence.
 2. On a 50-node Rössler network observed through its mean field, a reservoir trained on one run per coupling cannot anticipate complete synchronization. Apparent successes came from luck or tuning.
@@ -112,7 +113,7 @@ With one run per ε the reservoir is wrong even at ε = 0.14, a value it trained
 4. Simple mean-field statistics track each run's hidden near-sync time (r = 0.81 to 0.98). The information is in the aggregate signal; what failed was learning a clean dependence on ε from single runs.
 5. Training on three or more runs per coupling fixes most of this, giving reproducible predictions about 0.02 to 0.04 past the training data.
 
-## 8. Limitations and next steps
+## Limitations and next steps
 
 - One network topology, identical oscillators, no measurement noise.
 - 20 reservoirs per setting; the runs-per-coupling result uses one set of training seeds and should be repeated with another.
